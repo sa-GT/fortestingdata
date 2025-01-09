@@ -1,35 +1,49 @@
+let url = "https://677f67de0476123f76a64435.mockapi.io/books";
+// Parent element
+let re = document.getElementById("result");
 
-let url = "https://677f67de0476123f76a64435.mockapi.io/books"
-//  parent element 
-let re = document.getElementById("result")
-async function show(){
-    //Doing async in that function because could there an function take long time so will give function like wite and untel the that part of function end gonna return pack to him  
-    //For get data
-    let hi =await fetch(url)
-    //Convert data to an JSON
-    let data = await hi.json()
-    // looping throw data 
-    data.forEach(element => {
-        // create an Children element 
-        var ps = document.createElement("div")
-        //use backtik for multiline and engaging variables within
-        ps.innerHTML = `<table class="table">
-  <thead>
-    <tr>
-      <th scope="col">ID</th>
-      <th scope="col">First</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th scope="row">${element.id}</th>
-      <td>${element.name}</td>
-    </tr>
-  </tbody>
-</table>`
-// append child to parent
-re.appendChild(ps)
-    });
+async function show() {
+    try {
+        // Fetch data from the API
+        let response = await fetch(url);
+        // Convert data to JSON
+        let data = await response.json();
+
+        // Create a table element
+        let table = document.createElement("table");
+        table.className = "table";
+
+        // Create the table header
+        let thead = document.createElement("thead");
+        thead.innerHTML = `
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Name</th>
+            </tr>
+        `;
+        table.appendChild(thead);
+
+        // Create the table body
+        let tbody = document.createElement("tbody");
+
+        // Loop through the data and create rows
+        data.forEach(element => {
+            let row = document.createElement("tr");
+            row.innerHTML = `
+                <th scope="row">${element.id}</th>
+                <td>${element.name}</td>
+            `;
+            tbody.appendChild(row);
+        });
+
+        // Append the tbody to the table
+        table.appendChild(tbody);
+
+        // Append the table to the parent element
+        re.appendChild(table);
+    } catch (error) {
+        console.error("Error fetching data:", error);
+    }
 }
 
-show()
+show();
